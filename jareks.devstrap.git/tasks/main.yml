@@ -2,7 +2,7 @@
 - name: install common packages
   apt: name=git state=present
 
-- name: copy vim files to dotfiles
+- name: copy git files to dotfiles
   copy: 
     src={{ item }}
     dest={{ dotfiles_dir }}/{{ item }}

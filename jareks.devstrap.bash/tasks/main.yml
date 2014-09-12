@@ -21,7 +21,7 @@
     dest="{{ homedir }}/.bash_local"
 
 - name: make sure bashrc exists
-  shell: "touch {{ homedir }}/.bashrc && chown dev:dev {{ homedir }}/.bashrc"
+  shell: "touch {{ homedir }}/.bashrc"
   args:
     creates: "{{ homedir }}/.bashrc"
 
