@@ -1,0 +1,36 @@
+---
+- name: ensure dotfiles_dir exists
+  file: 
+    path={{ dotfiles_dir }}
+    state=directory
+
+- name: ensure original bashext exists
+  copy: 
+    src=.bashext 
+    dest={{ dotfiles_dir }}/.bashext 
+
+- name: symlink bashext
+  file: 
+    state=link
+    src={{ dotfiles_dir }}/.bashext 
+    dest={{ homedir }}/.bashext
+
+- name: copy bash_local skeleton
+  copy: 
+    src=.bash_local 
+    dest="{{ homedir }}/.bash_local"
+
+- name: make sure bashrc exists
+  shell: "touch {{ homedir }}/.bashrc && chown dev:dev {{ homedir }}/.bashrc"
+  args:
+    creates: "{{ homedir }}/.bashrc"
+
+- name: include bashext in bashrc
+  lineinfile: 
+    dest={{ homedir }}/.bashrc 
+    line="source {{ homedir }}/.bashext"
+
+- name: include bash_local in bashrc
+  lineinfile: 
+    dest={{ homedir }}/.bashrc 
+    line="source {{ homedir }}/.bash_local"

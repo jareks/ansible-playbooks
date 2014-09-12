@@ -1,0 +1,9 @@
+---
+- name: copy inputrc
+  copy: src=.inputrc dest={{ dotfiles_dir }}/.inputrc
+
+- name: symlink inputrc
+  file: 
+    state=link
+    src={{ dotfiles_dir }}/.inputrc
+    dest={{ homedir }}/.inputrc

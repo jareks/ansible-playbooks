@@ -1,0 +1,13 @@
+---
+# tasks file for jareks.devstrap.docker
+- name: install apt-transport-https
+  apt: name=apt-transport-https state=present
+
+- name: add docker apt key
+  apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=36A1D7869245C8950F966E92D8576A8BA88D21E9
+
+- name: add docker apt repo
+  apt_repository: repo="deb https://get.docker.io/ubuntu docker main"
+
+- name: install docker package
+  apt: name=lxc-docker state=present

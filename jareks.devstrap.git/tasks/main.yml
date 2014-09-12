@@ -1,0 +1,23 @@
+---
+- name: install common packages
+  apt: name=git state=present
+
+- name: copy vim files to dotfiles
+  copy: 
+    src={{ item }}
+    dest={{ dotfiles_dir }}/{{ item }}
+  with_items:
+    - .gitconfig
+    - .gitignore_global
+    - .gitconfig_local
+
+- name: symlink gitconfig and gitignore_global
+  file: 
+    state=link
+    src={{ dotfiles_dir }}/{{ item }}
+    dest={{ homedir }}/{{ item }}
+  with_items:
+    - .gitconfig
+    - .gitignore_global
+    - .gitconfig_local
+

@@ -1,0 +1,14 @@
+---
+- name: create dev user
+  user:
+    name="dev"
+    groups="sudo"
+    uid="{{ dev_user_id }}"
+    password="{{ dev_user_password_encrypted }}"
+    shell="/bin/bash"
+
+- name: add ssh key to dev user
+  authorized_key: 
+    user=dev
+    key="{{ lookup('file', ssh_public_key) }}"
+

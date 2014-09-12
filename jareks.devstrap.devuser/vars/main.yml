@@ -1,0 +1,3 @@
+---
+dev_user_id: 1000
+ssh_public_key: '/home/hawk/.ssh/id_rsa.pub'

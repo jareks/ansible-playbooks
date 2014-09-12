@@ -1,0 +1,16 @@
+---
+- name: install common packages
+  apt: name={{ item }} state=present update_cache=true
+  with_items:
+    - git
+    - curl 
+    - htop
+    - ack-grep
+    - sysstat 
+    - tree 
+    - iotop 
+    - ifstat 
+    - colordiff
+    - build-essential
+  sudo: true
+
