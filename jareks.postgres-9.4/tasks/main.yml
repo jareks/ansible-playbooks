@@ -1,0 +1,38 @@
+---
+# TODO: move this to devstrap.common? or duplicate?
+- name: makes sure that LC_ALL 
+  lineinfile: dest=/etc/default/locale line='LC_ALL="en_US.UTF-8"' state=present
+  sudo: true
+
+- name: add postgres apt-key
+  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
+  sudo: true
+
+- name: add postgres repo
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.4'
+  sudo: true
+
+- name: prepares apt for postgres install
+  apt: update_cache=true
+  sudo: true
+
+- name: install postgres packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - postgresql-9.4 
+    - postgresql-client-9.4 
+    - postgresql-contrib-9.4 
+    - libpq-dev
+    - python-psycopg2 # required by ansible
+  sudo: true
+
+- name: postgres accepts connections from all addresses
+  lineinfile: dest=/etc/postgresql/9.4/main/pg_hba.conf line="host all  all    0.0.0.0/0  md5" state=present
+  sudo: true
+  notify: postgresql_restart
+
+- name: postgres listen on all interfaces
+  lineinfile: dest=/etc/postgresql/9.4/main/postgresql.conf line="listen_addresses='*'" state=present
+  sudo: true
+  notify: postgresql_restart
+

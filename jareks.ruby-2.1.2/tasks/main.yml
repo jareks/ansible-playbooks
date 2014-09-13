@@ -1,0 +1,41 @@
+---
+- name: get ruby-build
+  git: 
+    repo=https://github.com/sstephenson/ruby-build.git 
+    dest=/tmp/ruby-build
+- name: install ruby-build
+  shell: ./install.sh
+  args:
+    chdir: /tmp/ruby-build
+  sudo: true
+
+- name: install packages for ruby
+  apt: name={{ item }} 
+  with_items:
+    - build-essential
+    - zlib1g-dev
+    - libreadline-dev
+    - libssl-dev
+    - libcurl4-openssl-dev
+  sudo: true
+
+- name: build ruby
+  shell: ruby-build 2.1.2 /usr/local/ruby-2.1.2
+  args:
+    chdir: /tmp/ruby-build
+    creates: /usr/local/ruby-2.1.2/bin/ruby
+  sudo: true
+
+- name: prepend new ruby to PATH
+  lineinfile:
+    backrefs=yes
+    regexp='^PATH="?(((?!/usr/local/ruby-2.1.2/bin).)*?)"?$'
+    line='PATH="/usr/local/ruby-2.1.2/bin:\1"'
+    dest=/etc/environment
+  sudo: true
+
+- name: install bundler
+  # PATH needed while sudoing: http://stackoverflow.com/questions/257616/sudo-changes-path-why
+  shell: PATH=/usr/local/ruby-2.1.2/bin:$PATH gem install bundler
+  sudo: true
+
