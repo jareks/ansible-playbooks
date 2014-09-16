@@ -29,13 +29,13 @@
 - name: prepend new ruby to PATH
   lineinfile:
     backrefs=yes
-    regexp='^PATH="?(((?!/usr/local/ruby-2.1.2/bin).)*?)"?$'
-    line='PATH="/usr/local/ruby-2.1.2/bin:\1"'
+    regexp='^PATH="?(((?!{{ ruby_path_bin }}).)*?)"?$'
+    line='PATH="{{ ruby_path_bin }}:\1"'
     dest=/etc/environment
   sudo: true
 
 - name: install bundler
   # PATH needed while sudoing: http://stackoverflow.com/questions/257616/sudo-changes-path-why
-  shell: PATH=/usr/local/ruby-2.1.2/bin:$PATH gem install bundler
+  shell: PATH={{ ruby_path_bin }}:$PATH gem install bundler
   sudo: true
 
