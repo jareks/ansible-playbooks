@@ -1,0 +1,34 @@
+---
+- name: allocate swapfile
+  command: fallocate -l {{ swapfile_size }} {{ swapfile_path }}
+  sudo: true
+  args:
+    creates: "{{ swapfile_path }}"
+
+- name: sets swapfile permissions
+  file:
+    path={{ swapfile_path }}
+    mode=0600
+    owner=root
+    group=root
+    state=file
+  sudo: true
+
+- name: mkswap swapfile
+  command: mkswap {{ swapfile_path }}
+  sudo: true
+  when: ansible_swaptotal_mb < 1
+
+- name: add swapfile to fstab
+  mount:
+    fstype=swap
+    name=none
+    opts=sw
+    src={{ swapfile_path }}
+    state=present
+  sudo: true
+
+- name: mount all swaps
+  command: swapon -a
+  sudo: true
+
