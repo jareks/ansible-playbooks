@@ -1,0 +1,10 @@
+---
+- name: install foreman gem
+  sudo: yes
+  shell: gem install foreman
+
+- name: Start foreman services
+  template:
+    src=upstart.conf
+    dest=/etc/init/{{ app_name }}.conf
+  sudo: yes

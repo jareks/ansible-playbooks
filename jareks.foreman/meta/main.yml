@@ -1,0 +1,9 @@
+---
+galaxy_info:
+  author: Jarek Skrzypek
+  description: "Installs foreman service. Based on: f-s-v.railsbox-foreman-services"
+  license: BSD
+  min_ansible_version: 1.6
+  categories:
+    - system
+dependencies: []
